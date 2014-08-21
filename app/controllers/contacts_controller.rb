@@ -5,6 +5,11 @@ class ContactsController < ApplicationController
   # GET /contacts.json
   def index
     @contacts = Contact.all
+    if request.format.to_s.eql? "application/json"
+      render content_type: "application/javascript"
+    else
+      render content_type: request.format
+    end
   end
 
   # GET /contacts/1
@@ -25,16 +30,30 @@ class ContactsController < ApplicationController
   # POST /contacts.json
   def create
     @contact = Contact.new(contact_params)
+    
+    if request.format.to_s.eql? "application/json"
+      logger.info "es json"
 
-    respond_to do |format|
       if @contact.save
-        format.html { redirect_to @contact, notice: 'Contact was successfully created.' }
-        format.json { render action: 'show', status: :created, location: @contact }
+        render action: 'show', :format => :json, content_type: "application/javascript"
       else
-        format.html { render action: 'new' }
-        format.json { render json: @contact.errors, status: :unprocessable_entity }
+        render json: @contact.errors, status: :unprocessable_entity, :callback => params.require(:callback), content_type: "application/javascript"
       end
+
+    else
+      logger.info "no lo es"
+      respond_to do |format|
+        if @contact.save
+          format.html { redirect_to @contact, notice: 'Contact was successfully created.' }
+          format.json { render action: 'show', status: :created, location: @contact }
+        else
+          format.html { render action: 'new' }
+          format.json { render json: @contact.errors, status: :unprocessable_entity }
+        end
+      end
+
     end
+
   end
 
   # PATCH/PUT /contacts/1
