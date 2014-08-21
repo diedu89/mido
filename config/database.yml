@@ -1,0 +1,29 @@
+# SQLite version 3.x
+#   gem install sqlite3
+#
+#   Ensure the SQLite 3 gem is defined in your Gemfile
+#   gem 'sqlite3'
+development:
+  adapter: mysql2
+  database: mido_development
+  host: localhost
+  username: railsdev
+  password: railsdev
+  encoding: utf8
+
+test:
+  adapter: mysql2
+  database: mido_test
+  host: localhost
+  username: railsdev
+  password: railsdev
+  encoding: utf8
+
+production:
+  adapter: postgresql
+  database: da1mcft6b2urjh
+  host: ec2-54-197-241-91.compute-1.amazonaws.com
+  username: hpjtxnscgiillp
+  password: qUeDDY2kZ2wH8MFv9uH6qIe3tf
+  encoding: utf8
+  port: 5432
